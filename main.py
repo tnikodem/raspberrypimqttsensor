@@ -34,12 +34,14 @@ cache = []
 
 
 while True:
+#  with open ("config.json", "r") as f:
+#      config = json.loads(f.read())
 
   picture = np.empty((240, 320, 3), dtype=np.uint8)
   camera.capture(picture, "rgb")
   camera_gain = float(camera.digital_gain * camera.analog_gain)
   camera_exposure_speed = camera.exposure_speed  # in ms
-  luminosity = np.average(picture) / camera_gain / camera_exposure_speed * 1000 * 264 / 4 / 2 / 2
+  luminosity = np.average(picture) / camera_gain / camera_exposure_speed * 2**14
   online = ping_router.value
 
   sensor_values = read_all(True)
@@ -80,15 +82,20 @@ while True:
   else:
       if not online:
           utils.activate_wifi()
-      online = True
+          for i in range(30):
+              online = ping_router.value
+              if not online:
+                  time.sleep(1)
+                  continue
+              utils.upload_cache()
+              break
 
   if online:
       utils.turn_led_on()
   else:
       utils.turn_led_off()
 
-  time.sleep(10)
-
+  time.sleep(30)
 
 
 camera.stop_preview()
