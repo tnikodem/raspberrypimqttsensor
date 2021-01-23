@@ -14,8 +14,6 @@ from mh_z19 import read_all
 import utils
 
 
-#test
-
 MQTT_SERVER = "192.168.0.53"
 MQTT_PATH = "sentinel/sensors"
 
