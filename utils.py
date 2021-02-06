@@ -1,5 +1,43 @@
 import os
+import time
+import json
 
+import psycopg2
+import numpy as np
+import picamera
+
+
+class LuminositySensor:
+    def __init__(self):
+        self.camera = None
+        
+    def open_camera(self):
+        if self.camera and not self.camera.closed:
+            return
+        self.camera = picamera.PiCamera()
+        self.camera.resolution = (320, 240)
+        #self.camera.exposure_mode = 'off'
+        #self.camera.awb_mode = 'off'
+        self.camera.start_preview()
+        time.sleep(2)
+        
+    def get_luminosity(self, keep_open=False):
+        self.open_camera()
+        picture = np.empty((240, 320, 3), dtype=np.uint8)
+        self.camera.capture(picture, "rgb")
+        camera_gain = float(self.camera.digital_gain * self.camera.analog_gain)
+        camera_exposure_speed = self.camera.exposure_speed  # in ms
+        luminosity = np.average(picture) / camera_gain / camera_exposure_speed * 2**14
+        if not keep_open:
+            self.camera.stop_preview()
+            self.camera.close()
+        return luminosity
+
+
+def wait_for_next_run(seconds=1):
+    sleep_for = int(seconds) - int(time.time()) % int(seconds)
+    time.sleep(sleep_for)
+    
 
 def turn_led_off():
     with open("/sys/class/leds/led0/brightness", "r") as f:
