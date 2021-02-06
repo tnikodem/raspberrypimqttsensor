@@ -1,7 +1,7 @@
 # Install
-python -m venv /home/pi/venv3.7
-source /home/pi/venv3.7/bin/activate
-pip install -r requirements.txt
+1. python -m venv /home/pi/venv3.7
+2. source /home/pi/venv3.7/bin/activate
+3. pip install -r requirements.txt
 
 # Start
 python main.py
