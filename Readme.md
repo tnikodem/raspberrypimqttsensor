@@ -12,7 +12,7 @@ python main.py
 2. sudo systemctl daemon-reload
 3. sudo systemctl enable mqttsensor-py.service
 4. sudo systemctl start mqttsensor-py.service
-## start, restart status
+## start, restart, status
 - sudo systemctl status mqttsensor-py.service
 - sudo systemctl stop mqttsensor-py.service
 - sudo systemctl start mqttsensor-py.service
