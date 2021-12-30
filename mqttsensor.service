@@ -1,0 +1,15 @@
+[Unit]
+Description=MQTT Sensor Service
+After=multi-user.target
+Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/sensor
+ExecStart=/home/pi/venv3.7/bin/python /home/pi/sensor/main.py
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target
+
